@@ -18,5 +18,5 @@ COPY . .
 
 EXPOSE 8005
 
-# Uygulamayı 8005 portunda broadcast (0.0.0.0) adresinden başlat
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8005"]
+# Uygulamayı bulutta dinamik $PORT, yerelde 8005 portunda broadcast (0.0.0.0) adresinden başlat
+CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8005}"]
