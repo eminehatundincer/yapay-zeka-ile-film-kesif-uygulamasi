@@ -23,8 +23,8 @@ function resolveBackendUrls() {
   const host = rawHost.replace(/^https?:\/\//i, '').replace(/\/+$/, '');
   const rawPort = (import.meta.env.VITE_BACKEND_PORT || '').trim();
 
-  // Bulut domainlerinde (*.up.railway.app vb.) veya standart 80/443 portlarında harici port ekleme
-  const isCloudDomain = /\.(up\.railway\.app|vercel\.app|onrender\.com)$/i.test(host);
+  // Railway bulut domainlerinde (*.up.railway.app) veya standart 80/443 portlarında harici port ekleme
+  const isCloudDomain = /\.(up\.railway\.app|railway\.app)$/i.test(host);
   const port =
     !rawPort || rawPort === '80' || rawPort === '443' || isCloudDomain ? '' : rawPort;
   const hostWithPort = port ? `${host}:${port}` : host;
