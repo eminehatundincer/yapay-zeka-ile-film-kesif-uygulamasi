@@ -11,13 +11,22 @@ import Dashboard from './components/Dashboard.jsx';
  */
 function resolveBackendUrls() {
   const envSecure = import.meta.env.VITE_SECURE;
+  const rawHost = (import.meta.env.VITE_BACKEND_HOST || window.location.hostname).trim();
+  const hostStartsHttps = /^https:\/\//i.test(rawHost);
+
   const isSecure =
     envSecure !== undefined && String(envSecure).trim() !== ''
       ? String(envSecure).toLowerCase() === 'true'
-      : window.location.protocol === 'https:';
+      : hostStartsHttps || window.location.protocol === 'https:';
 
-  const host = (import.meta.env.VITE_BACKEND_HOST || window.location.hostname).trim();
-  const port = (import.meta.env.VITE_BACKEND_PORT || '').trim();
+  // Olası 'https://', 'http://' veya sondaki '/' karakterlerini temizle
+  const host = rawHost.replace(/^https?:\/\//i, '').replace(/\/+$/, '');
+  const rawPort = (import.meta.env.VITE_BACKEND_PORT || '').trim();
+
+  // Bulut domainlerinde (*.up.railway.app vb.) veya standart 80/443 portlarında harici port ekleme
+  const isCloudDomain = /\.(up\.railway\.app|vercel\.app|onrender\.com)$/i.test(host);
+  const port =
+    !rawPort || rawPort === '80' || rawPort === '443' || isCloudDomain ? '' : rawPort;
   const hostWithPort = port ? `${host}:${port}` : host;
 
   const httpProtocol = isSecure ? 'https' : 'http';

@@ -11,7 +11,7 @@ RUN npm ci
 
 # Vite derleme zamanı ortam değişkenlerini ARG olarak al ve ENV olarak aktar
 ARG VITE_BACKEND_HOST=localhost
-ARG VITE_BACKEND_PORT=8005
+ARG VITE_BACKEND_PORT=
 ARG VITE_SECURE=false
 
 ENV VITE_BACKEND_HOST=$VITE_BACKEND_HOST \
