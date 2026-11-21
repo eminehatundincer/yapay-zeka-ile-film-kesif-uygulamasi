@@ -2,8 +2,7 @@
 
 ## Canlı Demo (Railway)
 
-- **Web Uygulaması (Frontend):** https://frontend-production-c4adda12.up.railway.app
-- **Backend API & Swagger Docs:** https://yapay-zeka-ile-film-kesif-uygulamasi-production.up.railway.app/docs
+- **Web Uygulaması:** https://frontend-production-c4adda12.up.railway.app
 
 ## Proje Akışı
 
