@@ -1,0 +1,64 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environments
+.venv/
+backend/.venv/
+venv/
+ENV/
+
+# Environment Variables & Secrets (.env dosyalari kesinlikle pushlanmaz)
+.env
+**/.env
+.env.*
+**/.env.*
+!.env.example
+!**/.env.example
+
+# Sistem Promptları ve Geliştirme Talimatları
+prompts/
+
+# Geçici Test / Rapor / Yardımcı Script Dosyaları
+backend/test_db_report.md
+test_agent.py
+generate_schema_diagram.py
+database_schema.puml
+
+# Pytest / Cache / Logs
+.pytest_cache/
+**/.pytest_cache/
+.coverage
+htmlcov/
+*.log
+
+# Node / React / Vite
+node_modules/
+**/node_modules/
+frontend/dist/
+frontend/build/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

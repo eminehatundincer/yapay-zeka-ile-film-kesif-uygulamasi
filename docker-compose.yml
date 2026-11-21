@@ -1,0 +1,74 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: sineai-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-film_kesif_db}
+    ports:
+      # Yerel 5432 portuyla çakışmayı önlemek için host 5433 portuna eşlenir
+      - "${POSTGRES_HOST_PORT:-5433}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-film_kesif_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+    networks:
+      - sineai_network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: sineai-backend
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    environment:
+      # Docker iç ağı üzerinden doğrudan 'db' servisine bağlan
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-film_kesif_db}
+      PORT: 8005
+    ports:
+      - "${BACKEND_HOST_PORT:-8005}:8005"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8005/api/health', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 10s
+    networks:
+      - sineai_network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_BACKEND_HOST: ${VITE_BACKEND_HOST:-localhost}
+        VITE_BACKEND_PORT: ${BACKEND_HOST_PORT:-8005}
+        VITE_SECURE: ${VITE_SECURE:-false}
+    container_name: sineai-frontend
+    restart: unless-stopped
+    ports:
+      # Windows 80 portu çakışmasını önlemek için host 3000 portundan sunulur
+      - "${FRONTEND_HOST_PORT:-3000}:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - sineai_network
+
+volumes:
+  postgres_data:
+
+networks:
+  sineai_network:
+    driver: bridge
