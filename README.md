@@ -1,5 +1,10 @@
 # Yapay Zeka ile Film Dizi Keşif Uygulaması
 
+## Canlı Demo (Railway)
+
+- **Web Uygulaması (Frontend):** https://frontend-production-c4adda12.up.railway.app
+- **Backend API & Swagger Docs:** https://yapay-zeka-ile-film-kesif-uygulamasi-production.up.railway.app/docs
+
 ## Proje Akışı
 
 Gemini API -> PostgreSQL -> FastAPI -> React -> Docker -> Railway
